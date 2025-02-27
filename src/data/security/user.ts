@@ -15,6 +15,11 @@ export const getUserById = async (id: User["id"]) => {
   return user as SanitizedUser;
 };
 
+export const getUserByUsername = async (username: User["username"]) => {
+  const result = await db.select().from(users).where(eq(users.username, username));
+  return { ...result[0] } as User
+};
+
 type UpdateUser = MakeOptional<InsertUser>;
 export const updateUserById = async (id: User["id"], update: UpdateUser) => {
   return await db.update(users).set(update).where(eq(users.id, id));
