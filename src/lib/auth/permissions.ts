@@ -1,5 +1,6 @@
 "use server";
 
+import { checkUserPermission } from "@/data";
 import { db } from "@/db";
 import { userRoles } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -10,7 +11,7 @@ export async function userHasPermission(
   action: string
 ): Promise<boolean> {
   try {
-    return await userHasPermission(userId, resource, action);
+    return await checkUserPermission(userId, resource, action);
   } catch (error) {
     console.error("Error checking user permission:", error);
     return false;
