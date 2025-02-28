@@ -39,7 +39,7 @@
     │   │   │       └── page.tsx
     │   │   └── layout.tsx    # Dashboard layout with nav and auth check
     │   │
-    │   ├── api/              # Limited API routes (justified below)
+    │   ├── api/              # Limited API routes
     │   │   ├── auth/
     │   │   │   └── route.ts  # Authentication endpoints (login/refresh)
     │   │   ├── uploads/
@@ -82,12 +82,7 @@
     │   ├── schema/           # Drizzle schema
     │   │   ├── index.ts      # Exports all schema
     │   │   ├── core.ts       # Core entities
-    │   │   ├── scheduling.ts # Scheduling components
-    │   │   ├── security.ts   # Security components
-    │   │   └── forecast.ts   # Forecasting components
-    │   │
-    │   ├── migrations/       # Drizzle migrations
-    │   │   └── ...
+    │   │   └─── security.ts   # Security components
     │   │
     │   ├── seed/             # Database seeders
     │   │   ├── index.ts
