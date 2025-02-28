@@ -17,6 +17,18 @@ export const createUser = async (user: InsertUser) => {
   return await db.insert(users).values(user).returning({ id: users.id });
 };
 
+export const getUsers = async (): Promise<SanitizedUser[]> => {
+  return await db
+    .select({
+      id: users.id,
+      username: users.username,
+      isActive: users.isActive,
+      isLocked: users.isLocked,
+      lastLogin: users.lastLogin,
+    })
+    .from(users);
+};
+
 type WithOptionalPasswordHash<T> = T & { passwordHash?: string };
 export const getUserById = async (id: User["id"]) => {
   const result = await db.select().from(users).where(eq(users.id, id));
@@ -94,3 +106,16 @@ export const checkUserPermission = async (
 
   return result.length > 0;
 };
+
+export async function assignRoleToUser(userId: string, roleId: string) {
+  return await db.insert(userRoles).values({
+    userId,
+    roleId,
+  });
+}
+
+export async function removeRoleFromUser(userId: string, roleId: string) {
+  return await db
+    .delete(userRoles)
+    .where(and(eq(userRoles.userId, userId), eq(userRoles.roleId, roleId)));
+}

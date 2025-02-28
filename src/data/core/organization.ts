@@ -35,3 +35,7 @@ export const addOrganizationRole = async (
 ) => {
   await db.insert(roles).values({ ...role, organizationId: id });
 };
+
+export const getOrganizationRoles = async (id: Organization["id"]) => {
+  return await db.select().from(roles).where(eq(roles.organizationId, id));
+};

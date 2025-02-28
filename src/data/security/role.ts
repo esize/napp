@@ -15,3 +15,7 @@ type UpdateRole = MakeOptional<InsertRole>;
 export const updateRoleById = async (id: Role["id"], update: UpdateRole) => {
   return await db.update(roles).set(update).where(eq(roles.id, id));
 };
+
+export const getRoles = async (): Promise<Role[]> => {
+  return await db.select().from(roles);
+};
