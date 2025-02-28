@@ -23,12 +23,9 @@ export function AuthProvider({
   const [user, setUser] = useState<TokenPayload | null>(initialUser);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Function to refresh user data from server
   const refreshUser = async () => {
     try {
       setIsLoading(true);
-      // We'll need to expose this as an API endpoint or server action
-      // that's callable from client components
       const [result] = await refreshUserAction();
       if (result?.user) {
         setUser(result.user);
