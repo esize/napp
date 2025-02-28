@@ -1,35 +1,28 @@
 "use server";
 
 import { clearTokens } from "@/lib/auth/jwt";
-import { getAuthenticatedUser } from "@/lib/auth/password";
 import { createSecurityLog } from "@/data";
 import { redirect } from "next/navigation";
+import { authedProcedure } from "@/actions/procedures";
 
-export async function logout(clientIp?: string) {
-  try {
-    // Get current user before clearing tokens
-    const user = await getAuthenticatedUser();
-
-    // Clear tokens
-    await clearTokens();
-
-    // Log the logout if user was authenticated
-    if (user) {
-      await createSecurityLog({
-        userId: user.sub,
-        action: "LOGOUT",
-        resource: "USER",
-        details: "User logout",
-        ipAddress: clientIp,
-      });
+export const logout = authedProcedure
+  .createServerAction()
+  .handler(async ({ ctx }) => {
+    try {
+      await clearTokens();
+      if (ctx.user) {
+        await createSecurityLog({
+          userId: ctx.user.sub,
+          action: "LOGOUT",
+          resource: "USER",
+          details: "User logout",
+          ipAddress: ctx.ipAddress,
+        });
+      }
+      redirect("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      await clearTokens();
+      redirect("/login");
     }
-
-    // Redirect to login page
-    redirect("/login");
-  } catch (error) {
-    console.error("Logout error:", error);
-    // Clear tokens even if logging fails
-    await clearTokens();
-    redirect("/login");
-  }
-}
+  });
