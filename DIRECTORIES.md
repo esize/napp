@@ -1,5 +1,5 @@
 ```
-/tmm-app
+/template-app
 ├── .env                      # Environment variables (not in source control)
 ├── .env.example              # Example environment variables
 ├── .gitignore
@@ -29,28 +29,8 @@
 │   │   │   │   ├── page.tsx
 │   │   │   │   ├── [id]/
 │   │   │   │   │   ├── page.tsx
-│   │   │   │   │   ├── positions/
-│   │   │   │   │   │   └── page.tsx
 │   │   │   │   │   └── members/
 │   │   │   │   │       └── page.tsx
-│   │   │   ├── schedule/
-│   │   │   │   ├── page.tsx
-│   │   │   │   └── [id]/
-│   │   │   │       └── page.tsx
-│   │   │   ├── manage/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── requests/
-│   │   │   │   │   └── page.tsx
-│   │   │   │   └── team-members/
-│   │   │   │       ├── page.tsx
-│   │   │   │       └── [id]/
-│   │   │   │           └── page.tsx
-│   │   │   ├── forecast/
-│   │   │   │   ├── page.tsx
-│   │   │   │   ├── variables/
-│   │   │   │   │   └── page.tsx
-│   │   │   │   └── positions/
-│   │   │   │       └── page.tsx
 │   │   │   ├── admin/
 │   │   │   │   ├── page.tsx
 │   │   │   │   ├── users/
@@ -62,7 +42,7 @@
 │   │   ├── api/              # Limited API routes (justified below)
 │   │   │   ├── auth/
 │   │   │   │   └── route.ts  # Authentication endpoints (login/refresh)
-│   │   │   ├── uploads/      
+│   │   │   ├── uploads/
 │   │   │   │   └── route.ts  # File upload handling
 │   │   │   └── webhooks/
 │   │   │       └── route.ts  # External system webhooks
@@ -77,22 +57,6 @@
 │   │   │   ├── login.ts
 │   │   │   ├── signup.ts
 │   │   │   └── reset-password.ts
-│   │   ├── teams/
-│   │   │   ├── create-team.ts
-│   │   │   ├── update-team.ts
-│   │   │   └── delete-team.ts
-│   │   ├── schedule/
-│   │   │   ├── create-shift.ts
-│   │   │   ├── update-schedule-stage.ts
-│   │   │   └── assign-shift.ts
-│   │   ├── manage/
-│   │   │   ├── update-team-member.ts
-│   │   │   ├── process-request.ts
-│   │   │   └── assign-skill.ts
-│   │   └── forecast/
-│   │       ├── update-variable.ts
-│   │       ├── create-position.ts
-│   │       └── update-position.ts
 │   │
 │   ├── components/           # React components
 │   │   ├── ui/               # shadcn/ui components
@@ -113,21 +77,6 @@
 │   │   │   ├── team-form.tsx
 │   │   │   ├── team-list.tsx
 │   │   │   └── team-detail.tsx
-│   │   │
-│   │   ├── schedule/         # Schedule-related components
-│   │   │   ├── schedule-editor.tsx
-│   │   │   ├── shift-form.tsx
-│   │   │   └── workload-view.tsx
-│   │   │
-│   │   ├── manage/           # Manage-related components
-│   │   │   ├── team-member-form.tsx
-│   │   │   ├── availability-calendar.tsx
-│   │   │   └── request-list.tsx
-│   │   │
-│   │   └── forecast/         # Forecast-related components
-│   │       ├── variable-form.tsx
-│   │       ├── position-form.tsx
-│   │       └── forecast-chart.tsx
 │   │
 │   ├── db/                   # Database layer
 │   │   ├── schema/           # Drizzle schema
@@ -148,7 +97,7 @@
 │   │
 │   ├── lib/                  # Utility functions and library code
 │   │   ├── auth/             # Authentication utilities
-│   │   │   ├── jwt.ts        # JWT handling 
+│   │   │   ├── jwt.ts        # JWT handling
 │   │   │   ├── password.ts   # Password hashing
 │   │   │   └── session.ts    # Server-side session handling
 │   │   │
@@ -163,11 +112,9 @@
 │   │   ├── use-form-with-server-action.ts
 │   │   └── use-optimistic-action.ts
 │   │
-│   ├── repositories/         # Data access repositories
-│   │   ├── team-repository.ts
-│   │   ├── schedule-repository.ts
-│   │   ├── team-member-repository.ts
-│   │   └── user-repository.ts
+│   ├── data/         # Data access repositories
+│   │   ├── core/
+│   │   └── security/
 │   │
 │   ├── types/                # TypeScript type definitions
 │   │   ├── schema.ts         # Schema-derived types
@@ -180,8 +127,6 @@
 │       │   └── authenticate.ts # Authentication logic
 │       │
 │       └── services/         # Business logic services
-│           ├── team-service.ts
-│           ├── schedule-service.ts
 │           └── user-service.ts
 │
 └── migrations/               # Drizzle migrations output directory
