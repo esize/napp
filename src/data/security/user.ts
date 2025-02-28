@@ -14,7 +14,7 @@ import { MakeOptional } from "@/types/utils";
 import { and, eq } from "drizzle-orm";
 
 export const createUser = async (user: InsertUser) => {
-  return await db.insert(users).values(user).returning({ id: users.id });
+  return await db.insert(users).values(user).returning();
 };
 
 export const getUsers = async (): Promise<SanitizedUser[]> => {

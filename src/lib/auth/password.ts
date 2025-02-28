@@ -9,6 +9,7 @@ import {
 } from "./jwt";
 import { getUserById, getUserByUsername } from "@/data";
 import { TokenPayload } from "@/types/auth";
+import { User } from "@/db/schema";
 
 export async function hashPassword(password: string): Promise<string> {
   return await hash(password);
@@ -114,24 +115,7 @@ export async function authenticateUser(
       };
     }
 
-    // Create tokens
-    const payload: Omit<TokenPayload, "exp"> = {
-      sub: user.id,
-      username: user.username,
-      isActive: user.isActive,
-      isLocked: user.isLocked,
-    };
-
-    const accessToken = await createAccessToken(payload);
-    const refreshToken = await createRefreshToken(user.id);
-
-    // Set cookies
-    await setTokens(accessToken, refreshToken);
-
-    return {
-      success: true,
-      user: payload,
-    };
+    return await createUserToken(user);
   } catch (error) {
     console.error("Authentication error:", error);
     return {
@@ -139,4 +123,22 @@ export async function authenticateUser(
       message: "An error occurred during authentication",
     };
   }
+}
+
+export async function createUserToken(user: User) {
+  const payload: Omit<TokenPayload, "exp"> = {
+    sub: user.id,
+    username: user.username,
+    isActive: user.isActive,
+    isLocked: user.isLocked,
+  };
+  const accessToken = await createAccessToken(payload);
+  const refreshToken = await createRefreshToken(user.id);
+
+  // Set cookies
+  await setTokens(accessToken, refreshToken);
+  return {
+    success: true,
+    user: payload,
+  };
 }

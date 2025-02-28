@@ -3,15 +3,9 @@
 import { z } from "zod";
 import { authenticateUser } from "@/lib/auth/password";
 import { createSecurityLog, updateUserById } from "@/data";
-import { redirect } from "next/navigation";
 import { procedure } from "@/actions/procedures";
 import { ZSAError } from "zsa";
-
-const LoginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
-  redirectTo: z.string().optional(),
-});
+import { LoginSchema } from "@/types/auth";
 
 export type LoginInput = z.infer<typeof LoginSchema>;
 
@@ -37,8 +31,7 @@ export const login = procedure
           ipAddress: ctx.ipAddress,
         });
       }
-      const redirectPath = input.redirectTo || "/dashboard";
-      redirect(redirectPath);
+      return;
     } catch {
       throw new ZSAError("ERROR", "Authentication failed");
     }

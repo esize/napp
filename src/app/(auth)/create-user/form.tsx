@@ -1,5 +1,5 @@
 "use client";
-import { login } from "@/actions/auth";
+import { createUserAction } from "@/actions/auth";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,28 +19,33 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { LoginSchema } from "@/types/auth";
+import { CreateUserSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
 
-interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
+interface CreateUserFormProps extends React.ComponentPropsWithoutRef<"div"> {
   returnTo?: string;
 }
-export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
-  const { data, execute, isPending, error } = useServerAction(login);
+export function CreateUserForm({
+  className,
+  returnTo,
+  ...props
+}: CreateUserFormProps) {
+  const { data, execute, isPending, error } = useServerAction(createUserAction);
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof CreateUserSchema>>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
       username: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+  async function onSubmit(values: z.infer<typeof CreateUserSchema>) {
     const [, err] = await execute(values);
     if (err) {
       return;
@@ -57,9 +62,9 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
     >
       <Card className="border-opacity-50 shadow-md">
         <CardHeader className="space-y-1 pb-4">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+          <CardTitle className="text-2xl font-bold">Create User</CardTitle>
           <CardDescription className="text-muted-foreground">
-            Enter your username and password to login to your account
+            Enter a username and password to create a new user.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -95,7 +100,27 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete="current-password"
+                        autoComplete="new-password"
+                        type={"password"}
+                        className="h-10 pr-10"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      Confirm Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        autoComplete="new-password"
                         type={"password"}
                         className="h-10 pr-10"
                         {...field}
@@ -110,19 +135,19 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
                 className="h-10 w-full transition-all"
                 disabled={isPending}
               >
-                {isPending ? "Logging in..." : "Login"}
+                {isPending ? "Creating User..." : "Create User"}
               </Button>
             </form>
           </Form>
           {data && (
             <Alert className="mt-4 border-green-200 bg-green-50 text-green-800">
-              <AlertDescription>Login successful</AlertDescription>
+              <AlertDescription>User creation successful</AlertDescription>
             </Alert>
           )}
           {error && (
             <Alert className="mt-4 border-red-200 bg-red-50 text-red-800">
               <AlertDescription>
-                {error.message || "An error occurred during login"}
+                {error.message || "An error occurred during user creation"}
               </AlertDescription>
             </Alert>
           )}
