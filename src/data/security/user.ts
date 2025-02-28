@@ -11,7 +11,7 @@ import {
   users,
 } from "@/db/schema";
 import { MakeOptional } from "@/types/utils";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const createUser = async (user: InsertUser) => {
   return await db.insert(users).values(user).returning({ id: users.id });
@@ -58,19 +58,19 @@ export const getUserRoles = async (id: User["id"]): Promise<Role["id"][]> => {
 export const getUserPermissions = async (
   id: User["id"]
 ): Promise<Permission["id"][]> => {
-  // First, get the user's roles
-  const userRoleIds = await getUserRoles(id);
-  // Find permissions associated with the user's roles
+  // Single query using joins to get all permissions for a user's roles
   const permissionsResult = await db
     .select({
-      permissionId: rolePermissions.permissionId,
+      permissionId: permissions.id,
     })
-    .from(rolePermissions)
-    .where(inArray(rolePermissions.roleId, userRoleIds));
+    .from(userRoles)
+    .innerJoin(rolePermissions, eq(userRoles.roleId, rolePermissions.roleId))
+    .innerJoin(permissions, eq(rolePermissions.permissionId, permissions.id))
+    .where(eq(userRoles.userId, id))
+    .groupBy(permissions.id); // Ensure distinct permissions if a user has multiple roles with the same permission
 
   // Extract permission IDs
-  const permissionIds = permissionsResult.map((p) => p.permissionId);
-  return permissionIds;
+  return permissionsResult.map((p) => p.permissionId);
 };
 
 export const checkUserPermission = async (
@@ -78,17 +78,19 @@ export const checkUserPermission = async (
   resource: string,
   action: string
 ) => {
-  const permissionIds = await getUserPermissions(id);
-  const permissionCheck = await db
-    .select()
-    .from(permissions)
+  const result = await db
+    .select({ permissionId: permissions.id })
+    .from(userRoles)
+    .innerJoin(rolePermissions, eq(userRoles.roleId, rolePermissions.roleId))
+    .innerJoin(permissions, eq(rolePermissions.permissionId, permissions.id))
     .where(
       and(
-        inArray(permissions.id, permissionIds),
+        eq(userRoles.userId, id),
         eq(permissions.resource, resource),
         eq(permissions.action, action)
       )
-    );
+    )
+    .limit(1); // We only need to know if at least one permission exists
 
-  return permissionCheck.length > 0;
+  return result.length > 0;
 };
