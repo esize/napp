@@ -73,10 +73,10 @@
 │   │   │   ├── user-menu.tsx
 │   │   │   └── header.tsx
 │   │   │
-│   │   ├── teams/            # Team-related components
-│   │   │   ├── team-form.tsx
-│   │   │   ├── team-list.tsx
-│   │   │   └── team-detail.tsx
+│   │   └─── teams/            # Team-related components
+│   │       ├── team-form.tsx
+│   │       ├── team-list.tsx
+│   │       └── team-detail.tsx
 │   │
 │   ├── db/                   # Database layer
 │   │   ├── schema/           # Drizzle schema
