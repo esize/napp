@@ -1,5 +1,3 @@
-"use server";
-
 import { getClientIp, getCurrentUser } from "@/lib/auth/server-utils";
 import { createServerActionProcedure, ZSAError } from "zsa";
 

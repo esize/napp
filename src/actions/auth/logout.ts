@@ -19,7 +19,7 @@ export const logout = authedProcedure
           ipAddress: ctx.ipAddress,
         });
       }
-      redirect("/login");
+      redirect("/");
     } catch (error) {
       console.error("Logout error:", error);
       await clearTokens();
