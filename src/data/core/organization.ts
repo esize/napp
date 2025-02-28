@@ -1,5 +1,11 @@
 import { db } from "@/db";
-import { InsertOrganization, Organization, organizations } from "@/db/schema";
+import {
+  InsertOrganization,
+  InsertRole,
+  Organization,
+  organizations,
+  roles,
+} from "@/db/schema";
 import { MakeOptional } from "@/types/utils";
 import { eq } from "drizzle-orm";
 
@@ -12,6 +18,20 @@ export const getOrganizationById = async (id: Organization["id"]) => {
 };
 
 type UpdateOrganization = MakeOptional<InsertOrganization>;
-export const updateOrganizationById = async (id: Organization["id"], update: UpdateOrganization) => {
-  return await db.update(organizations).set(update).where(eq(organizations.id, id));
+export const updateOrganizationById = async (
+  id: Organization["id"],
+  update: UpdateOrganization
+) => {
+  return await db
+    .update(organizations)
+    .set(update)
+    .where(eq(organizations.id, id));
+};
+
+type NewRole = Omit<InsertRole, "organizationId">;
+export const addOrganizationRole = async (
+  id: Organization["id"],
+  role: NewRole
+) => {
+  await db.insert(roles).values({ ...role, organizationId: id });
 };
