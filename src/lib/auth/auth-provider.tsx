@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { TokenPayload } from "@/types/auth";
 
+import { refreshUser as refreshUserAction } from "@/actions/auth";
+
 interface AuthContextType {
   user: TokenPayload | null;
   isLoading: boolean;
@@ -27,10 +29,10 @@ export function AuthProvider({
       setIsLoading(true);
       // We'll need to expose this as an API endpoint or server action
       // that's callable from client components
-      const refreshedUser = await fetch("/api/auth/me").then((res) =>
-        res.json()
-      );
-      setUser(refreshedUser.user);
+      const [result] = await refreshUserAction();
+      if (result?.user) {
+        setUser(result.user);
+      }
     } catch (error) {
       console.error("Failed to refresh user:", error);
     } finally {
