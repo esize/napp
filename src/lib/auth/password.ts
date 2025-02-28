@@ -19,7 +19,7 @@ export async function verifyPassword(
   password: string,
   hashedPassword: string
 ): Promise<boolean> {
-  return await verify(password, hashedPassword);
+  return await verify(hashedPassword, password);
 }
 
 export async function getAuthenticatedUser(): Promise<TokenPayload | null> {
