@@ -167,3 +167,23 @@ export const securityLogs = createTable(
   ]
 );
 export type InsertSecurityLog = typeof securityLogs.$inferInsert;
+
+export const refreshTokens = createTable(
+  "refresh_tokens",
+  {
+    id: varchar("id", { length: 64 }).primaryKey(), // The JTI claim
+    userId: varchar("user_id", { length: 21 })
+      .notNull()
+      .references(() => users.id),
+    expiresAt: timestamp("expires_at").notNull(),
+    used: boolean("used").default(false),
+    revoked: boolean("revoked").default(false),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [
+    index("refresh_tokens_user_id_idx").on(table.userId),
+    index("refresh_tokens_expires_at_idx").on(table.expiresAt),
+  ]
+);
+export type RefreshToken = typeof refreshTokens.$inferSelect;
+export type InsertRefreshToken = typeof refreshTokens.$inferInsert;

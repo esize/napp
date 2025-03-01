@@ -4,7 +4,7 @@ import { MakeOptional } from "@/types/utils";
 import { eq } from "drizzle-orm";
 
 export const createPermission = async (permission: InsertPermission) => {
-  return await db.insert(permissions).values(permission);
+  return await db.insert(permissions).values(permission).returning();
 };
 
 export const getPermissionById = async (id: Permission["id"]) => {
@@ -12,6 +12,13 @@ export const getPermissionById = async (id: Permission["id"]) => {
 };
 
 type UpdatePermission = MakeOptional<InsertPermission>;
-export const updatePermissionById = async (id: Permission["id"], update: UpdatePermission) => {
-  return await db.update(permissions).set(update).where(eq(permissions.id, id));
+export const updatePermissionById = async (
+  id: Permission["id"],
+  update: UpdatePermission
+) => {
+  return await db
+    .update(permissions)
+    .set(update)
+    .where(eq(permissions.id, id))
+    .returning();
 };

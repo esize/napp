@@ -14,7 +14,8 @@ import { MakeOptional } from "@/types/utils";
 import { and, eq } from "drizzle-orm";
 
 export const createUser = async (user: InsertUser) => {
-  return await db.insert(users).values(user).returning();
+  const [insertedUser] = await db.insert(users).values(user).returning();
+  return insertedUser;
 };
 
 export const getUsers = async (): Promise<SanitizedUser[]> => {
@@ -47,14 +48,19 @@ export const getUserByUsername = async (username: User["username"]) => {
 
 type UpdateUser = MakeOptional<InsertUser>;
 export const updateUserById = async (id: User["id"], update: UpdateUser) => {
-  return await db.update(users).set(update).where(eq(users.id, id));
+  return (
+    await db.update(users).set(update).where(eq(users.id, id)).returning()
+  )[0];
 };
 
 export const deactivateUser = async (id: User["id"]) => {
-  return await db
-    .update(users)
-    .set({ isActive: false })
-    .where(eq(users.id, id));
+  return (
+    await db
+      .update(users)
+      .set({ isActive: false })
+      .where(eq(users.id, id))
+      .returning()
+  )[0];
 };
 
 export const getUserRoles = async (id: User["id"]): Promise<Role["id"][]> => {
@@ -108,14 +114,19 @@ export const checkUserPermission = async (
 };
 
 export async function assignRoleToUser(userId: string, roleId: string) {
-  return await db.insert(userRoles).values({
-    userId,
-    roleId,
-  });
+  return (
+    await db
+      .insert(userRoles)
+      .values({
+        userId,
+        roleId,
+      })
+      .returning()
+  )[0];
 }
 
 export async function removeRoleFromUser(userId: string, roleId: string) {
-  return await db
+  await db
     .delete(userRoles)
     .where(and(eq(userRoles.userId, userId), eq(userRoles.roleId, roleId)));
 }

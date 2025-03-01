@@ -6,8 +6,9 @@ import {
   getTokens,
   setTokens,
   createRefreshToken,
+  refreshTokens,
 } from "./jwt";
-import { getUserById, getUserByUsername } from "@/data";
+import { getUserByUsername } from "@/data";
 import { TokenPayload } from "@/types/auth";
 import { User } from "@/db/schema";
 
@@ -36,40 +37,22 @@ export async function getAuthenticatedUser(): Promise<TokenPayload | null> {
 
   // If no valid access token, try refresh token
   if (refreshToken) {
-    const refreshPayload = await verifyToken<{ sub: string; type: string }>(
-      refreshToken
-    );
+    try {
+      // Use the new token rotation mechanism
+      const newTokens = await refreshTokens(refreshToken);
 
-    // If refresh token is valid, create a new access token
-    if (refreshPayload?.type === "refresh") {
-      try {
-        // Get user data to create a new access token
-        const user = await getUserById(refreshPayload.sub);
+      if (newTokens) {
+        // Set the new tokens in cookies
+        await setTokens(newTokens.accessToken, newTokens.refreshToken);
 
-        if (user) {
-          // Create a new access token
-          const newPayload: Omit<TokenPayload, "exp"> = {
-            sub: user.id,
-            username: user.username,
-            isActive: user.isActive,
-            isLocked: user.isLocked,
-          };
-
-          const newAccessToken = await createAccessToken(newPayload);
-
-          // Set the new access token in cookies
-          await setTokens(newAccessToken, refreshToken, {
-            maxAge: {
-              access: 15 * 60, // 15 minutes
-              refresh: 7 * 24 * 60 * 60, // 7 days
-            },
-          });
-
-          return newPayload;
-        }
-      } catch (error) {
-        console.error("Error refreshing token:", error);
+        // Return the user from the access token
+        const newPayload = await verifyToken<TokenPayload>(
+          newTokens.accessToken
+        );
+        return newPayload;
       }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
     }
   }
 

@@ -4,7 +4,7 @@ import { MakeOptional } from "@/types/utils";
 import { eq } from "drizzle-orm";
 
 export const createTeam = async (team: InsertTeam) => {
-  return await db.insert(teams).values(team);
+  return await db.insert(teams).values(team).returning();
 };
 
 export const getTeamById = async (id: Team["id"]) => {

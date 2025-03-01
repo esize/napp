@@ -10,7 +10,7 @@ import { MakeOptional } from "@/types/utils";
 import { eq } from "drizzle-orm";
 
 export const createOrganization = async (organization: InsertOrganization) => {
-  return await db.insert(organizations).values(organization);
+  return await db.insert(organizations).values(organization).returning();
 };
 
 export const getOrganizationById = async (id: Organization["id"]) => {
@@ -33,7 +33,10 @@ export const addOrganizationRole = async (
   id: Organization["id"],
   role: NewRole
 ) => {
-  await db.insert(roles).values({ ...role, organizationId: id });
+  return await db
+    .insert(roles)
+    .values({ ...role, organizationId: id })
+    .returning();
 };
 
 export const getOrganizationRoles = async (id: Organization["id"]) => {
