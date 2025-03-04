@@ -9,15 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormTextField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { LoginSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,10 +21,12 @@ import { useServerAction } from "zsa-react";
 interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
   returnTo?: string;
 }
+
+type LoginFormValues = z.infer<typeof LoginSchema>;
 export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
   const { data, execute, isPending, error } = useServerAction(login);
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       username: "",
@@ -40,7 +34,7 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+  async function onSubmit(values: LoginFormValues) {
     const [, err] = await execute(values);
     if (err) {
       return;
@@ -65,45 +59,18 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
+              <FormTextField<LoginFormValues, "username">
+                form={form}
                 name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Username
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="urmomma"
-                        autoComplete="username"
-                        className="h-10"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Username"
+                autoComplete="username"
+                placeholder="urmomma"
               />
-              <FormField
-                control={form.control}
+              <FormTextField<LoginFormValues, "password">
+                form={form}
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        autoComplete="current-password"
-                        type={"password"}
-                        className="h-10 pr-10"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Password"
+                autoComplete="current-password"
               />
               <Button
                 type="submit"
