@@ -1,4 +1,4 @@
-// src/db/seed/admin-seeder.ts
+import { faker } from "@faker-js/faker";
 import {
   createPermission,
   createRole,
@@ -58,3 +58,15 @@ export async function createInitialAdmin() {
     console.log("Admin user created successfully");
   }
 }
+
+export async function createMassUsers(users?: number) {
+  const numToCreate = users ?? 50;
+  for (let index = 0; index < numToCreate; index++) {
+    const username = faker.internet.username();
+    const userPassword = faker.internet.password();
+    const passwordHash = await hashPassword(userPassword);
+    await createUser({ username, passwordHash });
+  }
+}
+
+createMassUsers();

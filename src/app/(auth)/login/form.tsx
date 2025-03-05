@@ -70,6 +70,7 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
                 form={form}
                 name="password"
                 label="Password"
+                type="password"
                 autoComplete="current-password"
               />
               <Button
