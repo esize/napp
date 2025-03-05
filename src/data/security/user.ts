@@ -11,15 +11,28 @@ import {
   users,
 } from "@/db/schema";
 import { MakeOptional } from "@/types/utils";
-import { and, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
 export const createUser = async (user: InsertUser) => {
   const [insertedUser] = await db.insert(users).values(user).returning();
   return insertedUser;
 };
+export const getUsers = async ({
+  page = 1,
+  pageSize = 10,
+}: {
+  page?: number;
+  pageSize?: number;
+} = {}): Promise<{
+  users: SanitizedUser[];
+  totalCount: number;
+  pageCount: number;
+}> => {
+  // Calculate the offset based on page and pageSize
+  const offset = (page - 1) * pageSize;
 
-export const getUsers = async (): Promise<SanitizedUser[]> => {
-  return await db
+  // Query for paginated users
+  const paginatedUsers = await db
     .select({
       id: users.id,
       username: users.username,
@@ -27,7 +40,21 @@ export const getUsers = async (): Promise<SanitizedUser[]> => {
       isLocked: users.isLocked,
       lastLogin: users.lastLogin,
     })
-    .from(users);
+    .from(users)
+    .limit(pageSize)
+    .offset(offset);
+
+  // Query for total count
+  const [{ total }] = await db.select({ total: count() }).from(users);
+
+  // Calculate page count
+  const pageCount = Math.ceil(total / pageSize);
+
+  return {
+    users: paginatedUsers,
+    totalCount: total,
+    pageCount,
+  };
 };
 
 type WithOptionalPasswordHash<T> = T & { passwordHash?: string };
