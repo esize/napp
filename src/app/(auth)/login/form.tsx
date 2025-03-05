@@ -71,6 +71,7 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
                 name="password"
                 label="Password"
                 autoComplete="current-password"
+                type="password"
               />
               <Button
                 type="submit"
