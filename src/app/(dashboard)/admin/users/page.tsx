@@ -19,7 +19,7 @@ export default async function UsersPage({
   });
 
   return (
-    <div className="container py-10">
+    <>
       <h1 className="text-3xl font-bold tracking-tight mb-4">Users</h1>
       <p className="text-muted-foreground mb-8">
         Manage user accounts and permissions.
@@ -33,6 +33,6 @@ export default async function UsersPage({
           initialPageSize={pageSize}
         />
       </Suspense>
-    </div>
+    </>
   );
 }

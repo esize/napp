@@ -2,7 +2,6 @@
 
 import { clearTokens } from "@/lib/auth/jwt";
 import { createSecurityLog } from "@/data";
-import { redirect } from "next/navigation";
 import { authedProcedure } from "@/actions/procedures";
 
 export const logout = authedProcedure
@@ -19,10 +18,8 @@ export const logout = authedProcedure
           ipAddress: ctx.ipAddress,
         });
       }
-      redirect("/");
     } catch (error) {
       console.error("Logout error:", error);
       await clearTokens();
-      redirect("/login");
     }
   });

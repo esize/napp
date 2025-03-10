@@ -1,5 +1,7 @@
 import { logout } from "@/actions/auth";
+import { redirect } from "next/navigation";
 
 export const GET = async () => {
-  return await logout();
+  await logout();
+  redirect("/login");
 };

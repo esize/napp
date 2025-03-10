@@ -122,23 +122,26 @@ export async function setTokens(
 export async function clearTokens(): Promise<void> {
   const cookieStore = await cookies();
 
-  cookieStore.set({
-    name: "access_token",
-    value: "",
-    httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 0, // Expire immediately
-  });
+  // cookieStore.set({
+  //   name: "access_token",
+  //   value: "",
+  //   httpOnly: true,
+  //   path: "/",
+  //   secure: process.env.NODE_ENV === "production",
+  //   maxAge: 0, // Expire immediately
+  // });
 
-  cookieStore.set({
-    name: "refresh_token",
-    value: "",
-    httpOnly: true,
-    path: "/",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 0, // Expire immediately
-  });
+  // cookieStore.set({
+  //   name: "refresh_token",
+  //   value: "",
+  //   httpOnly: true,
+  //   path: "/",
+  //   secure: process.env.NODE_ENV === "production",
+  //   maxAge: 0, // Expire immediately
+  // });
+
+  cookieStore.delete("refresh_token");
+  cookieStore.delete("access_token");
 }
 
 // New function to implement token rotation
