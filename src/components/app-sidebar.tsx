@@ -16,7 +16,7 @@ export function AppSidebar({
   initialUser: TokenPayload | null;
 }) {
   return (
-    <Sidebar>
+    <Sidebar variant="inset">
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup />
