@@ -31,7 +31,7 @@ export const login = procedure
           ipAddress: ctx.ipAddress,
         });
       }
-      return;
+      return { success: true };
     } catch {
       throw new ZSAError("ERROR", "Authentication failed");
     }

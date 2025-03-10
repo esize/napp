@@ -93,7 +93,7 @@ export function NavUser({ user }: { user: TokenPayload | null }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/logout">
+              <Link href="/logout" prefetch={false}>
                 <LogOut />
                 Log out
               </Link>

@@ -3,14 +3,21 @@ import { Suspense } from "react";
 import { getUsers } from "@/data";
 import { UsersTable } from "./users-table";
 
-export default async function UsersPage({
-  searchParams,
-}: {
-  searchParams: { page?: string; size?: string };
-}) {
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
+
+interface UsersPageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function UsersPage(props: UsersPageProps) {
+  const searchParams = await props.searchParams;
   // Parse pagination parameters from URL
-  const page = searchParams.page ? parseInt(searchParams.page) : 1;
-  const pageSize = searchParams.size ? parseInt(searchParams.size) : 10;
+  const page = searchParams.page ? parseInt(searchParams.page as string) : 1;
+  const pageSize = searchParams.size
+    ? parseInt(searchParams.size as string)
+    : 10;
 
   // Fetch users data with pagination
   const { users, pageCount } = await getUsers({

@@ -11,7 +11,7 @@ export const createUserAction = procedure
   .handler(async ({ input }) => {
     try {
       const passwordHash = await hashPassword(input.password);
-      const [user] = await createUser({
+      const user = await createUser({
         username: input.username,
         passwordHash,
       });

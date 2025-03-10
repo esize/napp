@@ -13,7 +13,7 @@ import { Form, FormTextField } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { LoginSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
@@ -25,6 +25,7 @@ interface LoginFormProps extends React.ComponentPropsWithoutRef<"div"> {
 type LoginFormValues = z.infer<typeof LoginSchema>;
 export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
   const { data, execute, isPending, error } = useServerAction(login);
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
@@ -35,13 +36,17 @@ export function LoginForm({ className, returnTo, ...props }: LoginFormProps) {
   });
 
   async function onSubmit(values: LoginFormValues) {
-    const [, err] = await execute(values);
+    const [result, err] = await execute(values);
     if (err) {
       return;
     }
-    form.reset({});
-    const returnUrl = returnTo ?? "/";
-    redirect(returnUrl);
+
+    if (result && result.success) {
+      form.reset({});
+      const returnUrl = returnTo ?? "/";
+      console.log("test");
+      router.push(returnUrl);
+    }
   }
 
   return (
