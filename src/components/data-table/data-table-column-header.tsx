@@ -1,3 +1,4 @@
+// src/components/data-table/data-table-column-header.tsx
 "use client";
 
 import { Column } from "@tanstack/react-table";
@@ -18,11 +19,11 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn("flex items-center", className)}>
       <Button
         variant="ghost"
         size="sm"
-        className="h-8 data-[state=open]:bg-accent"
+        className="-ml-3 h-8 data-[state=open]:bg-accent"
       >
         <span>{title}</span>
         {column.getCanSort() && <ChevronsUpDown className="ml-2 h-4 w-4" />}

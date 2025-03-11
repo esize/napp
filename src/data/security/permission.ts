@@ -1,3 +1,4 @@
+"use server";
 import { db } from "@/db";
 import { InsertPermission, Permission, permissions } from "@/db/schema";
 import { MakeOptional } from "@/types/utils";

@@ -1,3 +1,4 @@
+// src/app/(dashboard)/admin/users/columns.tsx
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -43,9 +44,11 @@ export const columns = (
     cell: ({ row }) => {
       const isActive = row.getValue("isActive");
       return (
-        <Badge variant={isActive ? "default" : "destructive"}>
-          {isActive ? "Active" : "Inactive"}
-        </Badge>
+        <div className="flex w-[80px]">
+          <Badge variant={isActive ? "default" : "destructive"}>
+            {isActive ? "Active" : "Inactive"}
+          </Badge>
+        </div>
       );
     },
   },
@@ -57,9 +60,11 @@ export const columns = (
     cell: ({ row }) => {
       const isLocked = row.getValue("isLocked");
       return (
-        <Badge variant={isLocked ? "destructive" : "outline"}>
-          {isLocked ? "Locked" : "Unlocked"}
-        </Badge>
+        <div className="flex w-[80px]">
+          <Badge variant={isLocked ? "destructive" : "outline"}>
+            {isLocked ? "Locked" : "Unlocked"}
+          </Badge>
+        </div>
       );
     },
   },
@@ -70,36 +75,41 @@ export const columns = (
     ),
     cell: ({ row }) => {
       const date = row.getValue<Date | null>("lastLogin");
-      return date ? formatDate(date) : "Never";
+      return <div>{date ? formatDate(date) : "Never"}</div>;
     },
   },
   {
     id: "actions",
+    header: () => <div className="text-right"></div>,
     cell: ({ row }) => {
       const user = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => onAction({ type: "edit", user })}>
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => onAction({ type: "delete", user })}
-              className="text-destructive focus:text-destructive"
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => onAction({ type: "edit", user })}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => onAction({ type: "delete", user })}
+                className="text-destructive focus:text-destructive"
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       );
     },
   },

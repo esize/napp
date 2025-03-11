@@ -1,3 +1,4 @@
+"use server";
 import { db } from "@/db";
 import { refreshTokens, InsertRefreshToken, RefreshToken } from "@/db/schema";
 import { and, eq } from "drizzle-orm";

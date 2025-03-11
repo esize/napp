@@ -8,7 +8,6 @@ import { DataTable } from "@/components/data-table/data-table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { useDataTable } from "@/hooks/use-data-table";
 import { columns, UserAction } from "./columns";
-import { UserSheet } from "./user-sheet";
 import { DeleteUserDialog } from "./delete-user-dialog";
 import { getUsersAction } from "@/actions/users";
 import { useServerAction } from "zsa-react";
@@ -61,16 +60,6 @@ export function UsersTable({
     loadUsers();
   }, [searchParams, fetchUsers, initialPage, initialPageSize]);
 
-  // For optimistic updates
-  const handleUserSaved = useCallback(() => {
-    if (userAction?.type === "edit" && userAction.user) {
-      // After an edit, refresh the current page
-      const page = Number(searchParams.get("page") || initialPage);
-      const pageSize = Number(searchParams.get("size") || initialPageSize);
-      fetchUsers({ page, pageSize });
-    }
-  }, [userAction, fetchUsers, searchParams, initialPage, initialPageSize]);
-
   // For optimistic deletion
   const handleUserDeleted = useCallback(() => {
     if (userAction?.type === "delete" && userAction.user) {
@@ -97,14 +86,6 @@ export function UsersTable({
     <div>
       <DataTable table={table} />
       <DataTablePagination table={table} />
-
-      {/* Edit User Sheet */}
-      <UserSheet
-        open={userAction?.type === "edit"}
-        user={userAction?.type === "edit" ? userAction.user : null}
-        onOpenChange={(open) => !open && setUserAction(null)}
-        onUserSaved={handleUserSaved}
-      />
 
       {/* Delete User Dialog */}
       <DeleteUserDialog
