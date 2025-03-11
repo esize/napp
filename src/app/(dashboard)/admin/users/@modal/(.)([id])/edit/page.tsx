@@ -9,11 +9,12 @@ import {
 import EditUserForm from "../../../[id]/edit/form";
 import { getUserById } from "@/data";
 
-export default async function EditUserModalPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function EditUserModalPage(
+  props: {
+    params: Promise<{ id: string }>;
+  }
+) {
+  const params = await props.params;
   const user = await getUserById(params.id);
 
   if (!user) {
