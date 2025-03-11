@@ -1,4 +1,5 @@
 "use server";
+
 import { db } from "@/db";
 import { InsertSecurityLog, securityLogs } from "@/db/schema";
 

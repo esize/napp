@@ -1,3 +1,4 @@
+import "server-only";
 import { hash, verify } from "argon2";
 import { redirect } from "next/navigation";
 import {

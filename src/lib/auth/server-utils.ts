@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { redirect } from "next/navigation";
 import { getAuthenticatedUser, requireAuth } from "@/lib/auth/password";

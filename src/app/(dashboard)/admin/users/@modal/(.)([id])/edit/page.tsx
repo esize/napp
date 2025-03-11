@@ -1,4 +1,3 @@
-import { getUserById } from "@/data";
 import { notFound } from "next/navigation";
 import {
   Dialog,
@@ -8,6 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import EditUserForm from "../../../[id]/edit/form";
+import { getUserById } from "@/data";
 
 export default async function EditUserModal({
   params,

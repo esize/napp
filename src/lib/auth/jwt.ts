@@ -1,5 +1,4 @@
-"use server";
-// Updated src/lib/auth/jwt.ts
+import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { env } from "@/env";
 import { cookies } from "next/headers";

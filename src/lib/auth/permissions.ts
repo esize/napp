@@ -1,5 +1,3 @@
-"use server";
-
 import { checkUserPermission } from "@/data";
 
 export async function userHasPermission(

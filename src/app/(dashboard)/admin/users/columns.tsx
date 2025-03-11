@@ -16,6 +16,7 @@ import {
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import Link from "next/link";
 
 // Function to create and update user
 export type UserActionType = "edit" | "delete";
@@ -95,10 +96,8 @@ export const columns = (
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => onAction({ type: "edit", user })}
-              >
-                Edit
+              <DropdownMenuItem asChild>
+                <Link href={`/admin/users/${user.id}/edit`}>Edit</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

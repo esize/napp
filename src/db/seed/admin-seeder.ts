@@ -1,4 +1,4 @@
-// src/db/seed/admin-seeder.ts
+import "server-only";
 import {
   createPermission,
   createRole,

@@ -1,3 +1,4 @@
+import "server-only";
 import { createTable } from "@/db/util/createTable";
 import {
   boolean,

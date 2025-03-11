@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 import { db } from "@/db";
 import { InsertPermission, Permission, permissions } from "@/db/schema";
 import { MakeOptional } from "@/types/utils";

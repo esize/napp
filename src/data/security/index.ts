@@ -1,3 +1,4 @@
+import "server-only";
 export * from "./log";
 export * from "./permission";
 export * from "./role";

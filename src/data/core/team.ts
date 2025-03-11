@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 import { db } from "@/db";
 import { InsertTeam, Team, teams } from "@/db/schema";
 import { MakeOptional } from "@/types/utils";

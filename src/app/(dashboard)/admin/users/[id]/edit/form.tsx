@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { getUserById } from "@/data";
 import { SanitizedUser } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -20,7 +19,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useServerAction } from "zsa-react";
-import { useEffect } from "react";
 
 const UserFormSchema = z.object({
   username: z.string().min(3, {
@@ -37,34 +35,10 @@ export default function EditUserForm({
   user,
 }: {
   params: { id: string };
-  user?: SanitizedUser;
+  user: SanitizedUser;
 }) {
   const router = useRouter();
   const { execute, isPending } = useServerAction(updateUserById);
-
-  // If user is not passed in as a prop, we need to fetch it
-  useEffect(() => {
-    if (!user) {
-      const fetchUser = async () => {
-        try {
-          const userData = await getUserById(params.id);
-          if (userData) {
-            form.reset({
-              username: userData.username,
-              isActive: userData.isActive ?? true,
-              isLocked: userData.isLocked ?? false,
-            });
-          }
-        } catch (error) {
-          console.error("Failed to fetch user:", error);
-          toast.error("Failed to load user data");
-        }
-      };
-
-      fetchUser();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.id]);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(UserFormSchema),
