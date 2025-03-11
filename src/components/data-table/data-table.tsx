@@ -27,7 +27,7 @@ export function DataTable<TData>({
   ...props
 }: DataTableProps<TData>) {
   return (
-    <div className={cn("w-full space-y-4 overflow-auto", className)} {...props}>
+    <div className={cn("", className)} {...props}>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -46,7 +46,7 @@ export function DataTable<TData>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          <TableBody className="">
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow

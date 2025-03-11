@@ -27,10 +27,12 @@ export default async function UsersPage(props: UsersPageProps) {
 
   return (
     <>
-      <h1 className="text-3xl font-bold tracking-tight mb-4">Users</h1>
-      <p className="text-muted-foreground mb-8">
-        Manage user accounts and permissions.
-      </p>
+      <div className="flex flex-col gap-2 mb-8">
+        <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+        <p className="text-muted-foreground">
+          Manage user accounts and permissions.
+        </p>
+      </div>
 
       <Suspense fallback={<div>Loading users...</div>}>
         <UsersTable
