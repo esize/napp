@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/sidebar";
 import { TokenPayload } from "@/types/auth";
 import Link from "next/link";
+import { ThemeSelector } from "./theme-selector";
 
 export function NavUser({ user }: { user: TokenPayload | null }) {
   const { isMobile } = useSidebar();
@@ -52,7 +53,7 @@ export function NavUser({ user }: { user: TokenPayload | null }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? "bottom" : "top"}
             align="end"
             sideOffset={4}
           >
@@ -90,6 +91,15 @@ export function NavUser({ user }: { user: TokenPayload | null }) {
                 <Bell />
                 Notifications
               </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>
+                <span className="text-[13px] font-medium leading-[16px] text-muted-foreground">
+                  Preferences
+                </span>
+              </DropdownMenuLabel>
+              <ThemeSelector />
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
