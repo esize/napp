@@ -4,7 +4,7 @@ import EditUserForm from "./form";
 import { connection } from "next/server";
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
   const user = await getUserById(id);
 
   if (!user) {
@@ -24,7 +24,7 @@ export default async function EditUserPage({
   params: { id: string };
 }) {
   await connection();
-  const id = params.id;
+  const id = await params.id;
   const user = await getUserById(id);
 
   if (!user) {

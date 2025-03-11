@@ -1,4 +1,6 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { notFound, useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -7,21 +9,23 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import EditUserForm from "../../../[id]/edit/form";
-import { getUserById } from "@/data";
+import { SanitizedUser } from "@/db/schema";
 
-export default async function EditUserModalPage({
+export default function EditUserModal({
   params,
+  user,
 }: {
   params: { id: string };
+  user: SanitizedUser;
 }) {
-  const user = await getUserById(params.id);
+  const router = useRouter();
 
   if (!user) {
     notFound();
   }
 
   return (
-    <Dialog open>
+    <Dialog open onOpenChange={() => router.back()}>
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
@@ -29,7 +33,11 @@ export default async function EditUserModalPage({
             Update user details. Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <EditUserForm params={params} user={user} />
+        <EditUserForm
+          params={params}
+          user={user}
+          onSuccess={() => router.back()}
+        />
       </DialogContent>
     </Dialog>
   );

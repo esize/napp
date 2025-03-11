@@ -33,9 +33,11 @@ type UserFormValues = z.infer<typeof UserFormSchema>;
 export default function EditUserForm({
   params,
   user,
+  onSuccess,
 }: {
   params: { id: string };
   user: SanitizedUser;
+  onSuccess?: () => void;
 }) {
   const router = useRouter();
   const { execute, isPending } = useServerAction(updateUserById);
@@ -69,7 +71,12 @@ export default function EditUserForm({
 
       toast.success("User updated successfully");
       router.refresh();
-      router.back();
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.back();
+      }
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the user");
@@ -78,12 +85,6 @@ export default function EditUserForm({
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-medium">Edit User</h3>
-        <p className="text-sm text-muted-foreground">
-          Update user details. Click save when you&apos;re done.
-        </p>
-      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
