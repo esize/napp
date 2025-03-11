@@ -1,3 +1,4 @@
+"use server";
 // Updated src/lib/auth/jwt.ts
 import { SignJWT, jwtVerify } from "jose";
 import { env } from "@/env";
