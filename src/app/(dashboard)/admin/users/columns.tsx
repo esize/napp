@@ -104,7 +104,7 @@ export const columns = (
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => onAction({ type: "delete", user })}
-                className="text-destructive focus:text-destructive"
+                className="text-destructive-foreground focus:text-destructive-foreground"
               >
                 Delete
               </DropdownMenuItem>

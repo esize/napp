@@ -64,7 +64,11 @@ export function DeleteUserDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onDelete} disabled={isPending}>
+          <AlertDialogAction
+            onClick={onDelete}
+            disabled={isPending}
+            variant={"destructive"}
+          >
             {isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>

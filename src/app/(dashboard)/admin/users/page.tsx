@@ -2,7 +2,6 @@
 import { Suspense } from "react";
 import { getUsers } from "@/data";
 import { UsersTable } from "./users-table";
-import Link from "next/link";
 
 interface SearchParams {
   [key: string]: string | string[] | undefined;
@@ -33,7 +32,6 @@ export default async function UsersPage(props: UsersPageProps) {
         <p className="text-muted-foreground">
           Manage user accounts and permissions.
         </p>
-        <Link href="/admin/users/test">Edit</Link>
       </div>
 
       <Suspense fallback={<div>Loading users...</div>}>
