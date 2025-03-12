@@ -66,17 +66,21 @@ export default function EditUserForm({
 
       if (error) {
         toast.error("Failed to update user");
+        console.error(error);
         return;
       }
 
       toast.success("User updated successfully");
-      router.refresh();
 
+      // Call onSuccess callback if provided, otherwise navigate back
       if (onSuccess) {
         onSuccess();
       } else {
         router.back();
       }
+
+      // Refresh the page data
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the user");

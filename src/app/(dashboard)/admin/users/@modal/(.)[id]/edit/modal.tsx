@@ -1,3 +1,4 @@
+// In src/app/(dashboard)/admin/users/@modal/(.)([id])/edit/modal.tsx
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
@@ -7,9 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog";
+} from "../../../../../../../components/ui/dialog";
 import EditUserForm from "../../../[id]/edit/form";
-import { SanitizedUser } from "@/db/schema";
+import { SanitizedUser } from "../../../../../../../db/schema";
+import React from "react";
 
 export default function EditUserModal({
   params,
@@ -25,7 +27,12 @@ export default function EditUserModal({
   }
 
   return (
-    <Dialog open onOpenChange={() => router.back()}>
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) router.back();
+      }}
+    >
       <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>

@@ -97,7 +97,9 @@ export const columns = (
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem asChild>
-                <Link href={`/admin/users/${user.id}/edit`}>Edit</Link>
+                <Link href={`/admin/users/${user.id}/edit`} prefetch={false}>
+                  Edit
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
