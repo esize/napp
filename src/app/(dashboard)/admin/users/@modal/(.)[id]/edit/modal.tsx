@@ -1,4 +1,3 @@
-// In src/app/(dashboard)/admin/users/@modal/(.)([id])/edit/modal.tsx
 "use client";
 
 import { notFound, useRouter } from "next/navigation";
@@ -13,16 +12,10 @@ import EditUserForm from "../../../[id]/edit/form";
 import { SanitizedUser } from "../../../../../../../db/schema";
 import React from "react";
 
-export default function EditUserModal({
-  params,
-  user,
-}: {
-  params: { id: string };
-  user: SanitizedUser;
-}) {
+export default function EditUserModal({ user }: { user: SanitizedUser }) {
   const router = useRouter();
 
-  if (!user) {
+  if (!user || !user.id) {
     notFound();
   }
 
@@ -41,7 +34,7 @@ export default function EditUserModal({
           </DialogDescription>
         </DialogHeader>
         <EditUserForm
-          params={params}
+          params={{ id: user.id }}
           user={user}
           onSuccess={() => router.back()}
         />

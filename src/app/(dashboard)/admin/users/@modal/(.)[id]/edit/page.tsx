@@ -1,4 +1,3 @@
-// In src/app/(dashboard)/admin/users/@modal/(.)([id])/edit/page.tsx
 import { notFound } from "next/navigation";
 import { getUserById } from "@/data";
 import EditUserModal from "./modal";
@@ -9,12 +8,17 @@ export default async function EditUserModalPage({
 }: {
   params: { id: string };
 }) {
-  const { id } = await params;
-  const user = await getUserById(id);
+  // For intercepted routes, we need to be extra careful with params
+  if (!params || !params.id) {
+    console.error("Missing user ID in params:", params);
+    notFound();
+  }
+
+  const user = await getUserById(params.id);
 
   if (!user) {
     notFound();
   }
 
-  return <EditUserModal params={params} user={user} />;
+  return <EditUserModal user={user} />;
 }
